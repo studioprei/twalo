@@ -7,8 +7,6 @@ Spec::Rake::SpecTask.new(:spec) do |spec|
   spec.spec_files = FileList['spec/**/*_spec.rb']
 end
 
-task :spec => :check_dependencies
-
 begin
   require 'cucumber/rake/task'
   Cucumber::Rake::Task.new(:features)
