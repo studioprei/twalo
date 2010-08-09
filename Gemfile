@@ -8,3 +8,8 @@ group :test do
   gem 'rack-test'
   gem 'webrat'
 end
+
+group :devtools do
+  gem 'shotgun'
+  gem 'autotest'
+end
