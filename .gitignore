@@ -18,4 +18,8 @@ coverage
 rdoc
 pkg
 
+## Bundler
+.bundle
+
 ## PROJECT::SPECIFIC
+tmp
