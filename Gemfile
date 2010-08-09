@@ -3,7 +3,7 @@ source :gemcutter
 gem 'sinatra'
 gem 'haml'
 gem 'json'
-gem 'restclient'
+gem 'rest-client'
 
 if ENV['RACK_ENV'] != 'prouction'
   group :test do

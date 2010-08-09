@@ -54,111 +54,33 @@ describe "Twalo" do
     end
   end
   
-  describe "tag parser" do
+  describe 'Twalo::TagParser' do
+    
+    def twitter_data
+      example_json_file = File.join(File.dirname(__FILE__), 'examples', 'twitter_search.json')
+      File.read(example_json_file)
+    end
+    
     before(:each) do
       @tag_parser = Twalo::TagParser.new
     end
-    
-    context "with single tweet" do
-      before(:all) do
-        @twitter_response = <<-TWITTER
-          {
-            "results": [{
-              "profile_image_url": "http://a2.twimg.com/profile_images/000000000/p_normal.gif",
-              "created_at": "Mon, 09 Aug 2010 19:38:12 +0000",
-              "from_user": "TwitterUser",
-              "metadata": {
-                  "result_type": "recent"
-              },
-              "to_user_id": null,
-              "text": "A tweet with some tags #inception #graphic",
-              "id": 1000000000,
-              "from_user_id": 1000000000,
-              "geo": null,
-              "iso_language_code": "en",
-              "source": "&lt;a href=&quot;http://twitter.com/&quot;&gt;web&lt;/a&gt;"
-            }]
-          }
-        TWITTER
+
+  
+    describe ".parse" do
+      it "should be accessible" do
+        @tag_parser.should respond_to(:parse)  
       end
       
-      it "should return all tags" do
-        @tag_parser.parse(@twitter_response).should == ['inception', 'graphic']
+      context "data with tweets and tags" do
+        before(:each) do
+          @json_string = twitter_data
+          @parse_result = @tag_parser.parse(@json_string)
+        end
+      
+        it "should return something easily converted into a json string" do
+          lambda { JSON.parse(@parse_result.to_json) }.should_not raise_error(JSON::ParserError)
+        end
       end      
     end
-    
-      context "with multiple tweets" do
-        before(:all) do
-          @twitter_response = <<-TWITTER
-            {
-              "results": [{
-                "profile_image_url": "http://a2.twimg.com/profile_images/000000000/p_normal.gif",
-                "created_at": "Mon, 09 Aug 2010 19:38:12 +0000",
-                "from_user": "TwitterUser",
-                "metadata": {
-                    "result_type": "recent"
-                },
-                "to_user_id": null,
-                "text": "A tweet with some tags #inception #graphic",
-                "id": 1000000000,
-                "from_user_id": 1000000000,
-                "geo": null,
-                "iso_language_code": "en",
-                "source": "&lt;a href=&quot;http://twitter.com/&quot;&gt;web&lt;/a&gt;"
-              },
-              {
-                "profile_image_url": "http://a2.twimg.com/profile_images/000000000/p_normal.gif",
-                "created_at": "Mon, 09 Aug 2010 19:38:12 +0000",
-                "from_user": "TwitterUser",
-                "metadata": {
-                    "result_type": "recent"
-                },
-                "to_user_id": null,
-                "text": "A tweet with some more tags #foo #bar",
-                "id": 1000000000,
-                "from_user_id": 1000000000,
-                "geo": null,
-                "iso_language_code": "en",
-                "source": "&lt;a href=&quot;http://twitter.com/&quot;&gt;web&lt;/a&gt;"
-              }
-              ]
-            }
-          TWITTER
-
-        end
-
-        it "should return all tags" do
-          @tag_parser.parse(@twitter_response).should == ['inception', 'graphic', 'foo', 'bar']
-        end
-      end
-      
-      context "with duplicate tags" do
-        before(:all) do
-          @twitter_response = <<-TWITTER
-            {
-              "results": [{
-                "profile_image_url": "http://a2.twimg.com/profile_images/000000000/p_normal.gif",
-                "created_at": "Mon, 09 Aug 2010 19:38:12 +0000",
-                "from_user": "TwitterUser",
-                "metadata": {
-                    "result_type": "recent"
-                },
-                "to_user_id": null,
-                "text": "A tweet with some tags #foo #bar #foo",
-                "id": 1000000000,
-                "from_user_id": 1000000000,
-                "geo": null,
-                "iso_language_code": "en",
-                "source": "&lt;a href=&quot;http://twitter.com/&quot;&gt;web&lt;/a&gt;"
-              }]
-            }
-          TWITTER
-        end
-        
-        it "should return each tag only once" do
-          @tag_parser.parse(@twitter_response).should == ['foo', 'bar']
-        end
-      end
-
   end
 end

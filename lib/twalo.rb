@@ -5,10 +5,8 @@ require "json"
 
 module Twalo
   class TagParser
-    def parse(twitter_response)
-      JSON.parse(twitter_response).fetch('results').map { |tweet|
-        tweet['text'].scan(/\#(\w+?)( |$)/).map { |tag| tag[0].downcase }
-      }.flatten.uniq
+    def parse(data)
+      {}
     end
   end
   
