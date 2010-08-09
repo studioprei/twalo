@@ -1,6 +1,7 @@
 require "sinatra/base"
 require "haml"
 require "sass"
+require "json"
 
 module Twalo
   class App < Sinatra::Base
@@ -17,10 +18,17 @@ module Twalo
       haml :plot, :locals => { :query => params[:query] }
     end
     
+    post '/search' do
+      content_type :json
+      { 
+        :query => params[:query],
+        :content => []
+      }.to_json
+    end
+    
     get '/css/style.css' do
       content_type :css
       sass :style
-    end
-    
+    end 
   end
 end

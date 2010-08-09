@@ -6,6 +6,8 @@ require 'spec/autorun'
 require "rack/test"
 require 'webrat'
 
+require "json"
+
 require 'twalo'
 
 Webrat.configure do |config|
