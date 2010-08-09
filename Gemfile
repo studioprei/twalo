@@ -3,7 +3,7 @@ source :gemcutter
 gem 'sinatra'
 gem 'haml'
 gem 'json'
-gem 'twitter'
+gem 'restclient'
 
 if ENV['RACK_ENV'] != 'prouction'
   group :test do
