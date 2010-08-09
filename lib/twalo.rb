@@ -1,5 +1,6 @@
 require "sinatra/base"
 require "haml"
+require "sass"
 
 module Twalo
   class App < Sinatra::Base
@@ -10,6 +11,11 @@ module Twalo
       
     get '/' do
       haml :index
+    end
+    
+    get '/css/style.css' do
+      content_type :css
+      sass :style
     end
   end
 end
