@@ -1,6 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-
 describe "Twalo" do
   context "Sanity" do
     it "should respond ok" do
@@ -53,5 +52,113 @@ describe "Twalo" do
         end
       end
     end
+  end
+  
+  describe "tag parser" do
+    before(:each) do
+      @tag_parser = Twalo::TagParser.new
+    end
+    
+    context "with single tweet" do
+      before(:all) do
+        @twitter_response = <<-TWITTER
+          {
+            "results": [{
+              "profile_image_url": "http://a2.twimg.com/profile_images/000000000/p_normal.gif",
+              "created_at": "Mon, 09 Aug 2010 19:38:12 +0000",
+              "from_user": "TwitterUser",
+              "metadata": {
+                  "result_type": "recent"
+              },
+              "to_user_id": null,
+              "text": "A tweet with some tags #inception #graphic",
+              "id": 1000000000,
+              "from_user_id": 1000000000,
+              "geo": null,
+              "iso_language_code": "en",
+              "source": "&lt;a href=&quot;http://twitter.com/&quot;&gt;web&lt;/a&gt;"
+            }]
+          }
+        TWITTER
+      end
+      
+      it "should return all tags" do
+        @tag_parser.parse(@twitter_response).should == ['inception', 'graphic']
+      end      
+    end
+    
+      context "with multiple tweets" do
+        before(:all) do
+          @twitter_response = <<-TWITTER
+            {
+              "results": [{
+                "profile_image_url": "http://a2.twimg.com/profile_images/000000000/p_normal.gif",
+                "created_at": "Mon, 09 Aug 2010 19:38:12 +0000",
+                "from_user": "TwitterUser",
+                "metadata": {
+                    "result_type": "recent"
+                },
+                "to_user_id": null,
+                "text": "A tweet with some tags #inception #graphic",
+                "id": 1000000000,
+                "from_user_id": 1000000000,
+                "geo": null,
+                "iso_language_code": "en",
+                "source": "&lt;a href=&quot;http://twitter.com/&quot;&gt;web&lt;/a&gt;"
+              },
+              {
+                "profile_image_url": "http://a2.twimg.com/profile_images/000000000/p_normal.gif",
+                "created_at": "Mon, 09 Aug 2010 19:38:12 +0000",
+                "from_user": "TwitterUser",
+                "metadata": {
+                    "result_type": "recent"
+                },
+                "to_user_id": null,
+                "text": "A tweet with some more tags #foo #bar",
+                "id": 1000000000,
+                "from_user_id": 1000000000,
+                "geo": null,
+                "iso_language_code": "en",
+                "source": "&lt;a href=&quot;http://twitter.com/&quot;&gt;web&lt;/a&gt;"
+              }
+              ]
+            }
+          TWITTER
+
+        end
+
+        it "should return all tags" do
+          @tag_parser.parse(@twitter_response).should == ['inception', 'graphic', 'foo', 'bar']
+        end
+      end
+      
+      context "with duplicate tags" do
+        before(:all) do
+          @twitter_response = <<-TWITTER
+            {
+              "results": [{
+                "profile_image_url": "http://a2.twimg.com/profile_images/000000000/p_normal.gif",
+                "created_at": "Mon, 09 Aug 2010 19:38:12 +0000",
+                "from_user": "TwitterUser",
+                "metadata": {
+                    "result_type": "recent"
+                },
+                "to_user_id": null,
+                "text": "A tweet with some tags #foo #bar #foo",
+                "id": 1000000000,
+                "from_user_id": 1000000000,
+                "geo": null,
+                "iso_language_code": "en",
+                "source": "&lt;a href=&quot;http://twitter.com/&quot;&gt;web&lt;/a&gt;"
+              }]
+            }
+          TWITTER
+        end
+        
+        it "should return each tag only once" do
+          @tag_parser.parse(@twitter_response).should == ['foo', 'bar']
+        end
+      end
+
   end
 end

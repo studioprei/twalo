@@ -3,7 +3,15 @@ require "haml"
 require "sass"
 require "json"
 
-module Twalo  
+module Twalo
+  class TagParser
+    def parse(twitter_response)
+      JSON.parse(twitter_response).fetch('results').map { |tweet|
+        tweet['text'].scan(/\#(\w+?)( |$)/).map { |tag| tag[0].downcase }
+      }.flatten.uniq
+    end
+  end
+  
   class App < Sinatra::Base
         
     set :root, File.join(File.dirname(__FILE__), '..')
