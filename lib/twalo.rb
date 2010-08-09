@@ -1,9 +1,10 @@
 require "sinatra/base"
+require "haml"
 
 module Twalo
   class App < Sinatra::Base
     get '/' do
-      "Twallo"
+      haml :index
     end
   end
 end
