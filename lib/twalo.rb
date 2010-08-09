@@ -12,10 +12,15 @@ module Twalo
     get '/' do
       haml :index
     end
+
+    post '/' do
+      haml :plot, :locals => { :query => params[:query] }
+    end
     
     get '/css/style.css' do
       content_type :css
       sass :style
     end
+    
   end
 end

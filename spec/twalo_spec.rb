@@ -6,5 +6,17 @@ describe "Twalo" do
       get '/'
       last_response.should be_ok
     end
+    
+    describe "search for hashtag" do
+      before(:each) do
+        visit '/'
+        fill_in "Search", :with => "inception"
+        click_button "Plot"
+      end
+      
+      it "should show search query" do
+        response_body.should contain "Plotting inception"
+      end
+    end
   end
 end

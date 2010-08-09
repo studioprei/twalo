@@ -1,2 +1,6 @@
-%h1
-	Twalo
+%form{ method: 'POST' }
+	%label{ :for => 'search' }
+		Search
+	%input{ :type => 'text', :name => 'query', :id => 'search' }
+	%button{ :type => 'submit' }
+		Plot
