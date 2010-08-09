@@ -11,5 +11,4 @@ end
 
 group :devtools do
   gem 'shotgun'
-  gem 'autotest'
 end
