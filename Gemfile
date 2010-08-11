@@ -12,6 +12,12 @@ if ENV['RACK_ENV'] != 'prouction'
     gem 'webrat'
   end
   
+  group :test_orm do
+    gem 'dm-core'
+    gem 'dm-sweatshop'
+    gem 'dm-sqlite-adapter'
+  end
+  
   group :devtools do
     gem 'shotgun'
   end

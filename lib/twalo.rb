@@ -6,7 +6,7 @@ require "json"
 module Twalo
   class TagParser
     def parse(data)
-      {}
+      { 'first' => 0 }
     end
   end
   

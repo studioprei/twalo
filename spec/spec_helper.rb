@@ -5,10 +5,11 @@ require 'spec'
 require 'spec/autorun'
 require "rack/test"
 require 'webrat'
-
 require "json"
 
 require 'twalo'
+
+require "fixtures"
 
 Webrat.configure do |config|
   config.mode = :rack

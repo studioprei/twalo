@@ -68,17 +68,28 @@ describe "Twalo" do
   
     describe ".parse" do
       it "should be accessible" do
-        @tag_parser.should respond_to(:parse)  
+        @tag_parser.should respond_to(:parse)
       end
       
       context "data with tweets and tags" do
         before(:each) do
+          @json_data = { :results => [ 
+                                        Tweet.gen(:text => "Text with a #first tag"),
+                                        Tweet.gen(:text => "Text with a #first tag and a #second tag"),
+                                        Tweet.gen(:text => "Text with a #second tag and a #third tag"),
+                                        Tweet.gen(:text => "Text with a #fourth tag")
+                                      ] }
+          
           @json_string = twitter_data
           @parse_result = @tag_parser.parse(@json_string)
         end
       
         it "should return something easily converted into a json string" do
           lambda { JSON.parse(@parse_result.to_json) }.should_not raise_error(JSON::ParserError)
+        end
+        
+        it "should find the #first tag" do
+          @parse_result.keys.should include('first')
         end
       end      
     end
